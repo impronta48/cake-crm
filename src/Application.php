@@ -72,6 +72,7 @@ class Application extends BaseApplication
     $this->addPlugin('Notifications');
     $this->addPlugin('Tags');
     $this->addPlugin('EmailQueue');
+    $this->addPlugin('AssetMix');
   }
 
   /**

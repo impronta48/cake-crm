@@ -33,11 +33,17 @@ var app = new Vue({
             isBusy: false,
             nazione: null,
             provincia: null,
+            accetta_newsletter:true,
             selected: [],
             persone: [],
             selectAllStatus: false,
             multiTags: '',
             showAddTag: false,
+            ynempty: [
+                { value: null, text: '---' },
+                { value: true, text: 'Acconsente' },
+                { value: false, text: 'Non Acconsente' },
+            ]
         }
     },
     async created() {
@@ -64,6 +70,10 @@ var app = new Vue({
         if (urlParams.has('provincia')) {
             this.provincia = urlParams.get('provincia');
         }
+
+        if (urlParams.has('accetta_newsletter')) {
+            this.accetta_newsletter = urlParams.get('accetta_newsletter');
+        }
     },
     methods: {
         isCurrentPage(page) {
@@ -85,6 +95,9 @@ var app = new Vue({
             }
             if (this.nazione !== null) {
                 url += '&nazione=' + this.nazione;
+            }
+            if (this.accetta_newsletter !== null) {
+                url += '&accetta_newsletter=' + this.accetta_newsletter;
             }
             if (this.provincia !== null) {
                 url += '&provincia=' + this.provincia;
@@ -162,7 +175,7 @@ var app = new Vue({
             return d.toLocaleString();
         },
         search() {
-            this.$router.replace({ path: "persone", query: { q: this.q, tags: this.tags, nazione: this.nazione, provincia: this.provincia } });
+            this.$router.replace({ path: "persone", query: { q: this.q, tags: this.tags, nazione: this.nazione, provincia: this.provincia, accetta_newsletter:this.accetta_newsletter } });
             //const urlParams = new URLSearchParams(window.location.search);
             //this.q = urlParams.get('q');
             //this.tags = urlParams.getAll("tags");
@@ -230,6 +243,9 @@ var app = new Vue({
             }
             if (this.provincia !== null) {
                 url += '&provincia=' + this.provincia;
+            }
+            if (this.accetta_newsletter !== null) {
+                url += '&accetta_newsletter=' + this.accetta_newsletter;
             }
             return url;
         },

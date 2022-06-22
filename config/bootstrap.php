@@ -234,7 +234,9 @@ Inflector::rules('irregular', [
   'vettore' => 'vettori',
   'ordine' => 'ordini',
   'cespite' => 'cespiti',
-  'cespitecalendario' => 'cespiticalendario'
+  'cespitecalendario' => 'cespiticalendario',
+  'provincia' => 'province',
+  'nazione' => 'nazioni', 
 ]);
 Inflector::rules('uninflected', [
   'attivita',

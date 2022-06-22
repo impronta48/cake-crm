@@ -85,6 +85,12 @@ class PersoneController extends AppController
       }
     }
 
+    $accetta_newsletter = $this->request->getQuery('accetta_newsletter');
+    if (!empty($accetta_newsletter)) {
+      $accetta_newsletter = ($accetta_newsletter == "true");
+      $query->where(['accetta_newsletter' => $accetta_newsletter]);
+    };
+
     try {
       $persone = $this->paginate($query);
     } catch (NotFoundException $e) {
@@ -145,6 +151,7 @@ class PersoneController extends AppController
     $persone = $this->Persone->get($id, [
       'contain' => ['Tags'],
     ]);
+    
     if ($this->request->is(['patch', 'post', 'put'])) {
       $persone = $this->Persone->patchEntity($persone, $this->request->getData());
       if ($this->Persone->save($persone)) {
@@ -154,8 +161,9 @@ class PersoneController extends AppController
       }
       $this->Flash->error(__('The persone could not be saved. Please, try again.'));
     }
-    $tags = $this->Persone->Tags->find('list', ['keyField' => 'slug']);
+    //$tags = $this->Persone->Tags->find('list', ['keyField' => 'slug']);
     $this->set(compact('persone'));
+    $this->viewBuilder()->setOption('serialize', ['persone']);
   }
 
   /**

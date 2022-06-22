@@ -24,6 +24,7 @@
 
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
+use Cake\Routing\Router;
 
 /*
  * The default class to use for all routes
@@ -46,27 +47,28 @@ use Cake\Routing\RouteBuilder;
 /** @var \Cake\Routing\RouteBuilder $routes */
 $routes->setRouteClass(DashedRoute::class);
 
-$routes->scope('/', function (RouteBuilder $routes) {
+/* $routes->scope('/api', function (RouteBuilder $routes) {
   $routes->setExtensions(['json']);
   $routes->resources('Persone');
   $routes->resources('Tags');
 });
 
-$routes->scope('/', function (RouteBuilder $builder) {
-  $builder->setExtensions(['json', 'xls']);
-  /*
-     * Here, we are connecting '/' (base path) to a controller called 'Pages',
-     * its action called 'display', and we pass a param to select the view file
-     * to use (in this case, templates/Pages/home.php)...
-     */
-  $builder->connect('/', ['controller' => 'Persone', 'action' => 'index']);
+ */
+$routes->prefix('api', function ($routes) {
+   $routes->setExtensions(['json', 'xls']);
+   $routes->connect('/:controller', ['action' => 'index'], ['routeClass' => 'DashedRoute']);
+   $routes->connect('/:controller/:action/*', [], ['routeClass' => 'DashedRoute']);
 
-  /*
-     * ...and connect the rest of 'Pages' controller's URLs.
-     */
-  $builder->connect('/pages/*', 'Pages::display');
+   $routes->fallbacks(DashedRoute::class);
+});
 
-  /*
+$routes->scope('/', function (RouteBuilder $routes) {
+   $routes->connect('/:page', ['controller' => 'Spa', 'action' => 'index']);
+   $routes->connect('/', ['controller' => 'Spa', 'action' => 'index', 'home']);
+   $routes->connect('/pages/*', ['controller' => 'Spa', 'action' => 'index']);
+   $routes->connect('/:page/*', ['controller' => 'Spa', 'action' => 'index']);
+
+   /*
      * Connect catchall routes for all controllers.
      *
      * The `fallbacks` method is a shortcut for
@@ -79,7 +81,7 @@ $routes->scope('/', function (RouteBuilder $builder) {
      * You can remove these routes once you've connected the
      * routes you want in your application.
      */
-  $builder->fallbacks();
+   $routes->fallbacks(DashedRoute::class);
 });
 
 /*
